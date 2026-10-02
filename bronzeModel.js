@@ -7,14 +7,14 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x222222);
 
 // Camera
-const perspectiveCamera = new THREE.PerspectiveCamera(
-  75, //fov: goc nhin theo chieu doc, tinh bang do
-  window.innerWidth / window.innerHeight,   //ti le khung hinh chieu rong/ chieu cao
-  0.1,          //khoang cach gan nhat camera nhin thay
-  1000          //khoang cach xa nhat camera nhin thay
+const camera = new THREE.PerspectiveCamera(
+  75, //độ mở của camera
+  window.innerWidth / window.innerHeight, //tỉ lệ khung hình
+  0.1, //vật phải cách camera tối thiểu near thì mới nhìn thấy
+  1000 //vật cách camera quá far thì không được render
 );
 
-perspectiveCamera.position.set(0, 2, 5);
+camera.position.set(0, 2, 5); //Đặt vị trí camera
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -30,11 +30,16 @@ renderer.toneMappingExposure = 1.15;
 
 document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(perspectiveCamera, renderer.domElement);
+// Controls
+const controls = new OrbitControls(
+  camera,
+  renderer.domElement
+);
+
 controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 2;
+controls.dampingFactor = 0.05;
+controls.enableRotate = true;
+controls.enableZoom = true;
 
 // Light
 const ambientLight = new THREE.AmbientLight(
@@ -88,9 +93,9 @@ loader.load(
     // Center the model so it rotates around its own middle.
     model.position.sub(center);
 
-    const verticalFov = THREE.MathUtils.degToRad(perspectiveCamera.fov);
+    const verticalFov = THREE.MathUtils.degToRad(camera.fov);
     const fitHeightDistance = size.y / (2 * Math.tan(verticalFov / 2));
-    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * perspectiveCamera.aspect);
+    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect);
     const fitWidthDistance = size.x / (2 * Math.tan(horizontalFov / 2));
     const perspectiveCameraDistance = Math.max(fitHeightDistance, fitWidthDistance) * 1.25;
 
@@ -98,11 +103,11 @@ loader.load(
     museumLight.position.set(-modelSize, modelSize, modelSize);
     museumLight.target.position.set(0, 0, 0);
 
-    perspectiveCamera.position.set(0, 0, perspectiveCameraDistance);
-    perspectiveCamera.near = perspectiveCameraDistance / 100;
-    perspectiveCamera.far = perspectiveCameraDistance * 100;
-    perspectiveCamera.updateProjectionMatrix();
-    perspectiveCamera.lookAt(0, 0, 0);
+    camera.position.set(0, 0, perspectiveCameraDistance);
+    camera.near = perspectiveCameraDistance / 100;
+    camera.far = perspectiveCameraDistance * 100;
+    camera.updateProjectionMatrix();
+    camera.lookAt(0, 0, 0);
 
     controls.target.set(0, 0, 0);
     controls.minDistance = perspectiveCameraDistance * 0.2;
@@ -110,6 +115,28 @@ loader.load(
     controls.update();
 
     scene.add(model);
+
+    // Canh camera va tam xoay theo kich thuoc thuc cua model.
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    const distance = sphere.radius / Math.sin(
+      THREE.MathUtils.degToRad(camera.fov / 2)
+    );
+
+    camera.position.set(
+      sphere.center.x,
+      sphere.center.y,
+      sphere.center.z
+
+    );
+
+    camera.near = Math.max(distance / 100, 0.1);
+    camera.far = distance * 100;
+    camera.updateProjectionMatrix();
+
+    controls.target.copy(sphere.center);
+    controls.minDistance = sphere.radius * 0.5;
+    controls.maxDistance = sphere.radius * 10;
+    controls.update();
 
     console.log('Loaded', model);
   },
@@ -148,11 +175,13 @@ function animate() {
   requestAnimationFrame(animate);
 
   controls.update();
+  controls.update();
 
   renderer.render(
     scene,
-    perspectiveCamera
+    camera
   );
 }
 
 animate();
+

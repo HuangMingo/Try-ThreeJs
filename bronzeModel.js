@@ -11,10 +11,10 @@ const camera = new THREE.PerspectiveCamera(
   75, //độ mở của camera
   window.innerWidth / window.innerHeight, //tỉ lệ khung hình
   0.1, //vật phải cách camera tối thiểu near thì mới nhìn thấy
-  1000 //vật cách camera quá far thì không được render
+  2000 //vật cách camera quá far thì không được render
 );
 
-camera.position.set(0, 2, 5); //Đặt vị trí camera
+camera.position.set(0, 0, 25); //Đặt vị trí camera
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -103,7 +103,7 @@ loader.load(
     museumLight.position.set(-modelSize, modelSize, modelSize);
     museumLight.target.position.set(0, 0, 0);
 
-    camera.position.set(0, 0, perspectiveCameraDistance);
+    // camera.position.set(0, 0, perspectiveCameraDistance);
     camera.near = perspectiveCameraDistance / 100;
     camera.far = perspectiveCameraDistance * 100;
     camera.updateProjectionMatrix();
@@ -122,12 +122,11 @@ loader.load(
       THREE.MathUtils.degToRad(camera.fov / 2)
     );
 
-    camera.position.set(
-      sphere.center.x,
-      sphere.center.y,
-      sphere.center.z
-
-    );
+    // camera.position.set(
+    //   sphere.center.x,
+    //   sphere.center.y,
+    //   sphere.center.z
+    // );
 
     camera.near = Math.max(distance / 100, 0.1);
     camera.far = distance * 100;

@@ -1,0 +1,90 @@
+.sidebar {
+  position: absolute;
+  inset: 20px auto 20px 20px;
+  z-index: 10;
+  display: flex;
+  width: min(280px, calc(100vw - 40px));
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 18px;
+  background: rgb(10 14 24 / 82%);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+  backdrop-filter: blur(18px);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #7dd3fc;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.modelList {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.modelButton,
+.visibilityButton {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #e8edf7;
+  text-align: left;
+  transition: 160ms ease;
+}
+
+.modelButton {
+  padding: 11px 12px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.modelButton:hover,
+.modelButton.active {
+  border-color: rgb(125 211 252 / 60%);
+  background: rgb(125 211 252 / 14%);
+}
+
+.visibilityButton {
+  padding: 12px 16px;
+  background: #7dd3fc;
+  color: #071019;
+  font-weight: 700;
+  text-align: center;
+}
+
+.visibilityButton:hover:not(:disabled) {
+  background: #bae6fd;
+}
+
+.visibilityButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.empty {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    inset: 12px 12px auto;
+    width: auto;
+    max-height: 45vh;
+  }
+}

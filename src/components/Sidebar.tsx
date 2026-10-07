@@ -50,7 +50,7 @@ export default function Sidebar({
         onClick={onToggleVisibility}
         type="button"
       >
-        {hidden ? 'Show' : 'Hide'}
+        {hidden ? 'Show model' : 'Hide model'}
       </button>
     </aside>
   )

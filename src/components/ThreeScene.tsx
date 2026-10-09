@@ -28,14 +28,16 @@ export default function ThreeScene({ modelUrl, hidden }: ThreeSceneProps) {
     scene.background = new THREE.Color(0x080b12)
 
     const camera = new THREE.PerspectiveCamera(
-      60,
-      container.clientWidth / container.clientHeight,
-      0.1,
-      1000,
+      60,     //goc rong cua camera
+      container.clientWidth / container.clientHeight,     //ti le khung hinh
+      0.1,  //khoang cach toi mat phang cat gan nhat
+      1000, //khoang cach toi mat phang cat xa nhat
     )
     camera.position.set(0, 0, 4)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    const renderer = new THREE.WebGLRenderer({ antialias: true 
+        // khử răng cưa
+    }) 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(container.clientWidth, container.clientHeight)
     renderer.outputColorSpace = THREE.SRGBColorSpace
